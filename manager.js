@@ -136,5 +136,54 @@ function addToInv() {
 }
 
 function addProduct() {
-
+  inquirer.prompt([
+    {
+      name: "itemName",
+      message: "Item name: ",
+      type: "input"
+    },
+    {
+      name: "departmentName",
+      message: "Department name: ",
+      type: "input"
+    },
+    {
+      name: "price",
+      message: "Item price: ",
+      type: "input",
+      validate: function(value) {
+        if (isNaN(value) === false) {
+          return true;
+        }
+        return false;
+      }
+    },
+    {
+      name: "quantity",
+      message: "Quantity: ",
+      type: "input",
+      validate: function(value) {
+        if (isNaN(value) === false) {
+          return true;
+        }
+        return false;
+      }
+    },
+  ])
+  .then(function(answers) {
+    connection.query(
+      "INSERT INTO products SET ?",
+      {
+        product_name: answers.itemName,
+        department_name: answers.departmentName,
+        price: answers.price,
+        quantity: answers.quantity
+      },
+      function(err, res) {
+        if (err) throw err;
+        console.log(res.affectedRows + " product inserted!\n");
+        start();
+      }
+    )
+  })
 }

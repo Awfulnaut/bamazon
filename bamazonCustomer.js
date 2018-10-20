@@ -20,6 +20,17 @@ function start() {
   connection.query("SELECT * FROM products", function(err, results) {
     if (err) throw err;
 
+    //List the products for sale in a readable format
+    console.log("\nPRODUCTS FOR SALE:\n")
+    for (var i = 0; i < results.length; i++) {
+      console.log(
+        results[i].item_id + " | " + results[i].product_name +
+        "\nDepartment: " + results[i].department_name +
+        "\nQuantity: " + results[i].quantity + " | Price: $" + results[i].price +
+        "\n-------------------------------------------------" 
+      );
+    }
+
     inquirer
     .prompt([
       {
@@ -46,15 +57,43 @@ function start() {
       }
     ])
     .then(function(answers) {
-      console.log("Item id: " + answers.itemId + "\nQuantity: " + answers.quantity);
-
+      // init and get chosen item from database
       var chosenItem;
       for (var i = 0; i < results.length; i++) {
-        if (results[i].item_id === answers.itemId) {
+        if (results[i].item_id === parseInt(answers.itemId)) {
           chosenItem = results[i];
         }
       }
-      console.log(chosenItem);
+
+      if (chosenItem.quantity == 0) {
+        console.log("Sorry, this item is out of stock!");
+      }
+      else if (chosenItem.quantity >= answers.quantity) {
+        // "Fulfill" the order and display the item's remaining quantity
+        // Display the total cost of the customer's purchase
+        var total = chosenItem.price * answers.quantity;
+        console.log("You pay $" + total);
+        var quantityRemaining = chosenItem.quantity - answers.quantity;
+        connection.query(
+          "UPDATE products SET ? WHERE ?",
+          [
+            {
+              quantity: quantityRemaining
+            },
+            {
+              item_id: chosenItem.item_id
+            }
+          ],
+          function(err, res) {
+            if (err) throw err;
+            console.log("Database updated!\n");
+          }
+        )
+        console.log("Quantity remaining: " + quantityRemaining);
+
+      } else {
+        console.log("Sorry, we only have " + chosenItem.quantity + " of this item in stock, and cannot fulfill your order.");
+      }
 
       connection.end();
     })

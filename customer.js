@@ -31,8 +31,7 @@ function start() {
       );
     }
 
-    inquirer
-    .prompt([
+    inquirer.prompt([
       {
         name: "itemId",
         message: "What is the ID of the item you would like to buy?",
@@ -71,9 +70,9 @@ function start() {
       else if (chosenItem.quantity >= answers.quantity) {
         // "Fulfill" the order and display the item's remaining quantity
         // Display the total cost of the customer's purchase
-        var total = chosenItem.price * answers.quantity;
+        var total = parseInt(chosenItem.price) * parseInt(answers.quantity);
         console.log("You pay $" + total);
-        var quantityRemaining = chosenItem.quantity - answers.quantity;
+        var quantityRemaining = parseInt(chosenItem.quantity) - parseInt(answers.quantity);
         connection.query(
           "UPDATE products SET ? WHERE ?",
           [

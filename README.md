@@ -1,5 +1,5 @@
 # Bamazon
-In this project, I hooked up node to a MySQL databse containing a table of products for sale. Two different interactions are available; customer and manager. Both of these views take advantage of the [mysql](https://www.npmjs.com/package/mysql) and [inquirer](https://www.npmjs.com/package/inquirer) npm packages.
+In this project, I hooked up node to a MySQL databse containing a table of products for sale. Two different interactions are available; customer and manager. Both of these views take advantage of the [mysql](https://www.npmjs.com/package/mysql) and [inquirer](https://www.npmjs.com/package/inquirer) npm packages. A [video demo of this project](https://youtu.be/qJHxKrpSZxE) is available on YouTube.
 
 ## Customer
 In the customer view, users are presented with a list of products for sale, which includes the product's ID number, name, department, quantity, and price. The user inserts the ID of the item they wish to buy, along with a quantity. If the item is in stock, and if the item's stock is greater than the quantity requested, the order will be fulfilled, displaying the price the user must pay. It then updates the database to reflect the new quantity. If there are not enough items in stock, a message is displayed.
